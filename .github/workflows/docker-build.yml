@@ -1,6 +1,8 @@
 name: Docker Build and Push
 
 on:
+  push:
+    branches: ["main"]
   repository_dispatch:
     types: [docker-build]
   workflow_dispatch:
@@ -11,7 +13,7 @@ permissions:
   
 jobs:
   build_push:
-    name: Build Docker Image and Push to Docker Hub
+    name: Build Docker Image and Push to GHCR
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +54,7 @@ jobs:
             ghcr.io/tola1990/discord-tts-bot:latest
             ghcr.io/tola1990/discord-tts-bot:${{ steps.package-version.outputs.current-version }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
           build-args: |
             DATE_CREATED=${{ steps.date.outputs.date }}
             VERSION=${{ steps.package-version.outputs.current-version }}
